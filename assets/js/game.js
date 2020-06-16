@@ -5,55 +5,71 @@
 // "LOSE" - Player robot's health is zero or less
 
 var fight = function(enemy) {
+    // keep track of who goes first
+    var isPlayerTurn = true;
+
+    // randomly change turn order
+    if (Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
+
     // repeat and execute as long as plater and enemy are both still alive
     while (enemy.health > 0 && playerInfo.health > 0) {
-        // let player choose whether to fight or skip
-        if (fightOrSkip()) {
-            // if true (player skips), break loop
-            break;
-        }
-        
-        // generate random damage value based on player's attack power
-        var damage = randomNumber(playerInfo.attack -3, playerInfo.attack);
-        
-        // reduce enemy.health by subtracting the amount set in the playerInfo.attack variable
-        enemy.health = Math.max(0, enemy.health - damage);
-        console.log(
-            playerInfo.name + " attacked " + enemy.name + " for " + damage + " points of damage! " + enemy.name + " now has " + enemy.health + " health remaining."
-        );
+        if (isPlayerTurn) {
 
-        // check enemy's health
-        if (enemy.health <= 0) {
-            window.alert(enemy.name + " has died!");
-            // aware player money for winning
-            playerInfo.money = playerInfo.money + 20;
-            // leave while() loop since enemy is dead
-            break;
-        } 
-        else {
-            // display enemy's remaining health if they are still alive after being attacked
-            window.alert(enemy.name + " still has " + enemy.health + " health left.");
-        }
+            // let player choose whether to fight or skip
+            if (fightOrSkip()) {
+                // if true (player skips), break loop
+                break;
+            }
         
-        // generate random damage value based on enemy's attack power
-        var damage = randomNumber(enemy.attack -3, enemy.attack);
+            // generate random damage value based on player's attack power
+            var damage = randomNumber(playerInfo.attack -3, playerInfo.attack);
+            
+            // reduce enemy.health by subtracting the amount set in the playerInfo.attack variable
+            enemy.health = Math.max(0, enemy.health - damage);
+            console.log(
+                playerInfo.name + " attacked " + enemy.name + " for " + damage + " points of damage! " + enemy.name + " now has " + enemy.health + " health remaining."
+            );
 
-        // reduce playerInfo.health by subtracting the damage value generated
-        playerInfo.health = Math.max(0, playerInfo.health - damage);
-        console.log(
-            enemy.name + " attacked " + playerInfo.name + " for " + damage + " points of damage! " + playerInfo.name + " now has " + playerInfo.health + " health remaining."
-        );
+            // check enemy's health
+            if (enemy.health <= 0) {
+                window.alert(enemy.name + " has died!");
+                // award player money for winning
+                playerInfo.money = playerInfo.money + 20;
+                // leave while() loop since enemy is dead
+                break;
+            } 
+            else {
+                // display enemy's remaining health if they are still alive after being attacked
+                window.alert(enemy.name + " still has " + enemy.health + " health left.");
+            }
+        }    
+        else { 
+        
+            // generate random damage value based on enemy's attack power
+            var damage = randomNumber(enemy.attack -3, enemy.attack);
 
-        // check player's health
-        if (playerInfo.health <= 0) {
-            window.alert(playerInfo.name + " has died!");
-            // leave while() loop if player is dead
-            break;
-        } 
-        else {
-            // display player's remaining health if they are still alive after being attacked
-            window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+            // reduce playerInfo.health by subtracting the damage value generated
+            playerInfo.health = Math.max(0, playerInfo.health - damage);
+            console.log(
+                enemy.name + " attacked " + playerInfo.name + " for " + damage + " points of damage! " + playerInfo.name + " now has " + playerInfo.health + " health remaining."
+            );
+
+            // check player's health
+            if (playerInfo.health <= 0) {
+                window.alert(playerInfo.name + " has died!");
+                
+                // leave while() loop if player is dead
+                break;
+            } 
+            else {
+                // display player's remaining health if they are still alive after being attacked
+                window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+            }
         }
+        // switch turn order for next round
+        isPlayerTurn = !isPlayerTurn;
     }
 };
 
