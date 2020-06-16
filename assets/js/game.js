@@ -103,8 +103,8 @@ var startGame = function () {
                         shop();
                     }
                 }
-        } else {
-            window.alert("You have lost your robot in battle! Game Over!");
+        }
+        else {
             break;
         }
     }
@@ -115,7 +115,25 @@ var startGame = function () {
 var endGame = function() {
     // if player is still alive, player wins!
     if (playerInfo.health > 0) {
-        window.alert("Great job! You survived the game! Your score was " + playerInfo.money + ".");
+        window.alert("Great job! You survived the game! Let's see how you did!"); 
+        window.alert("Your score was " + playerInfo.money + ".");
+        
+        // check localStorage for bestplayer. If null, set to Roborto
+        var bestPlayer = localStorage.getItem("bestplayer");
+        bestPlayer = bestPlayer || "Roborto";
+
+        // check localStorage for high score. If null, set to 0
+        var highScore = localStorage.getItem("highscore");
+        highScore = highScore || 0;
+
+        if (highScore >= playerInfo.money) {
+            window.alert("The high score is " + highScore + " by " + bestPlayer + ". Maybe next time!");
+        }
+        else {
+            window.alert("That's a new high score! Woohoo!");
+            localStorage.setItem("bestplayer", playerInfo.name);
+            localStorage.setItem("highscore", playerInfo.money);
+        }
     }
     else {
         window.alert("You've lost your robot in battle.");
