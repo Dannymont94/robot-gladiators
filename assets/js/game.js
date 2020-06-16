@@ -5,29 +5,12 @@
 // "LOSE" - Player robot's health is zero or less
 
 var fight = function(enemy) {
+    // repeat and execute as long as plater and enemy are both still alive
     while (enemy.health > 0 && playerInfo.health > 0) {
-        // ask user whether to fight or skip
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-        console.log(promptFight);
-
-        // if user picks "skip", confirm and then stop the loop
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            if (playerInfo.money >= 10) {
-                // confirm user wants to skip
-                var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-                // if yes (true), leave fight
-                if (confirmSkip) {
-                    window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                    // subtract money from playerInfo.money for skipping
-                    playerInfo.money = playerInfo.money - 10;
-                    console.log("Money: ", playerInfo.money);
-                    break;
-                }
-            }
-            else {
-                window.alert("You don't have enough money!");
-            }
+        // let player choose whether to fight or skip
+        if (fightOrSkip()) {
+            // if true (player skips), break loop
+            break;
         }
         
         // generate random damage value based on player's attack power
@@ -116,7 +99,7 @@ var startGame = function () {
 var endGame = function() {
     // if player is still alive, player wins!
     if (playerInfo.health > 0) {
-        window.alert("Great job! You survived the game! You now have a score of " + playerInfo.money + ".");
+        window.alert("Great job! You survived the game! Your score was " + playerInfo.money + ".");
     }
     else {
         window.alert("You've lost your robot in battle.");
@@ -176,7 +159,45 @@ var getPlayerName = function() {
     }
 
     console.log("Your robot's name is " + name);
-}
+    return name;
+};
+
+var fightOrSkip = function() {
+    // ask user whether to fight or skip
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");    
+
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    promptFight = promptFight.toLowerCase();
+    console.log(promptFight);
+
+    // if user picks "skip", confirm and then stop the loop
+    if (promptFight === "skip") {
+        if (playerInfo.money >= 10) {
+            // confirm user wants to skip
+            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+            // if yes (true), leave fight
+            if (confirmSkip) {
+                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+                // subtract money from playerInfo.money for skipping
+                playerInfo.money = playerInfo.money - 10;
+                console.log("Money: ", playerInfo.money);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            window.alert("You don't have enough money!");
+            return false;
+        }
+    }
+};
 
 // create playerInfo object
 var playerInfo = {
@@ -195,6 +216,7 @@ var playerInfo = {
             window.alert("Refilling player's health by 20 for 7 dollars.");
             this.health += 20;
             this.money -= 7;
+            console.log("Health: " + this.health + ", Money: " + this.money);
         }
         else {
             window.alert("You don't have enough money!");
@@ -202,12 +224,13 @@ var playerInfo = {
     },
     upgradeAttack: function(){
         if (this.money >= 7) {
-            window.alert("Upgrading player's attack by 20 for 7 dollars.")
+            window.alert("Upgrading player's attack by 20 for 7 dollars.");
             this.attack += 6;
             this.money -= 7;
+            console.log("Attack: " + this.attack + ", Money: " + this.money);
         }
         else {
-            window.alert("You don't have enough money!")
+            window.alert("You don't have enough money!");
         }
     }
 };
